@@ -29,20 +29,18 @@ jobs:
     - name: Build
       run: |
         npm run build
-        cp --force LICENSE.txt system/.
-        cp --force README.md system/.
-        SYSTEM_VERSION=$(grep -oP '(?<="version": ")[^"]+' system/system.json | tr -d '\n')
-        perl -pi -E "s|latest/download/simple-dice-stats\\.zip|download/release-$SYSTEM_VERSION/simple-dice-stats.zip|" system/system.json
+        SYSTEM_VERSION=$(grep -oP '(?<="version": ")[^"]+' module.json | tr -d '\n')
+        perl -pi -E "s|latest/download/simple-dice-stats\\.zip|download/release-$SYSTEM_VERSION/simple-dice-stats.zip|" module.json
         echo "systemVersion=$SYSTEM_VERSION" >> $GITHUB_ENV
 
-    - run: cd system && zip -r ../simple-dice-stats.zip ./*
+    - run: zip -r ../simple-dice-stats.zip ./*
 
     - name: Create Version Release
       id: create_version_release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: false
-        artifacts: './system/system.json, ./simple-dice-stats.zip'
+        artifacts: './module.json, ./simple-dice-stats.zip'
         draft: false
         name: release-${{ env.systemVersion }}
         prerelease: true
