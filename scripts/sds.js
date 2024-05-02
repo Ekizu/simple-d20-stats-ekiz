@@ -8,7 +8,7 @@ class ChartWindow extends Application {
             title: "D20 STATISTICS",
             classes: ["sds-chart"],
             popOut: true,
-            resizable: false,
+            resizable: true,
             width: 800,
             height: 550
         });
@@ -508,6 +508,14 @@ function updatedata(datefrom, dateto, theuser) {
         }
     }
 
+    var total_value = 0;
+    var roll_count = 0;
+    for (var face_value = 1 ; face_value <= 20 ; face_value++)
+    {
+        total_value += (face_value * alldicedata[face_value - 1]);
+        roll_count += alldicedata[i - 1];
+    }
+    mean_value = total_value / roll_count;
 
     return {
         nat1s: alldicedata[0],
