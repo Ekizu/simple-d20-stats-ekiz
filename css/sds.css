@@ -189,7 +189,8 @@ table td {
 #nat1s,
 #att1s,
 #nat20s,
-#att20s {
+#att20s,
+#mean_value {
   text-align: right;
 }
 

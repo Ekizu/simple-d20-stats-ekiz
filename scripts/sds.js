@@ -8,7 +8,7 @@ class ChartWindow extends Application {
             title: "D20 STATISTICS",
             classes: ["sds-chart"],
             popOut: true,
-            resizable: false,
+            resizable: true,
             width: 800,
             height: 550
         });
@@ -49,6 +49,7 @@ class ChartWindow extends Application {
             nat20s: p['nat20s'],
             att20s: p['att20s'],
             att1s: p['att1s'],
+            mean_value: p['mean_value'],
             totalrolls: p['totalrolls'],
             whichuser: whichuser,
             svgicon: svgicon,
@@ -73,7 +74,7 @@ class ChartWindow extends Application {
         // Changing user
         $('#selectuser').change(ev => {
 
-            let theuser = $("#selectuser").val();            
+            let theuser = $("#selectuser").val();
 
             let prevfrom = $('select[name="datefrom"] option:selected').text();
             let prevto = $('select[name="dateto"] option:selected').text();
@@ -508,6 +509,15 @@ function updatedata(datefrom, dateto, theuser) {
         }
     }
 
+    let total_value = 0;
+    let roll_count = 0;
+    for (let face_value = 1 ; face_value <= 20 ; face_value++)
+    {
+        total_value += (face_value * alldicedata[face_value - 1]);
+        roll_count += alldicedata[face_value - 1];
+    }
+    const mean_value = total_value / roll_count;
+    console.log(`computed mean value is: ${mean_value}`);
 
     return {
         nat1s: alldicedata[0],
@@ -515,6 +525,7 @@ function updatedata(datefrom, dateto, theuser) {
         totalrolls: totalrolls,
         att20s: att20s,
         att1s: att1s,
+        mean_value: mean_value,
         svgicon: svgicon,
         titlecolor: titlecolor,
         appcontent: appcontent,
@@ -559,7 +570,7 @@ function d20icon(theusercolor) {
 }
 
 //Update the list of dates based on the selected user
-function populatedates(user) {  
+function populatedates(user) {
 
     let alldates = Object.keys(game.users.contents.find(f => f.name === user)['flags']['simple-dice-stats']['d20stats']);
 
@@ -616,6 +627,7 @@ function updatechartonchange() {
         $('#nat20s').html(p['nat20s']);
         $('#att20s').html(p['att20s']);
         $('#att1s').html(p['att1s']);
+        $('#mean_value').html(p['mean_value']);
         $('#totalrolls').html(p['totalrolls']);
         $('#usermostd1').html(usermostd1);
         $('#usermostd20').html(usermostd20);
